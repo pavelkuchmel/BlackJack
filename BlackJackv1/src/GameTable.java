@@ -11,29 +11,40 @@ public class GameTable {
             if (i>=48)numCard=11;
             deck.add(i, numCard);
         }
-        /*for (Integer bj : deck){
-            System.out.println(bj);
-        }*/
         Dealer dealer = new Dealer();
         Player player = new Player();
-        Player player1 = new Player();
-        for (;;){
-            System.out.println("Диллер раздает карты: ");
-            int a = deck.get(rdm.nextInt(52));
-            int b = deck.get(rdm.nextInt(52));
-            System.out.print("Игрок 1 получет: "+a+" и "+b);
+        fillDeck(deck);
+        showDeck(deck);
+        shaffleDeck(deck);
+        showDeck(deck);
 
-
+    }
+    static void fillDeck(ArrayList<Integer> arrayName){
+        int numCard = 2;
+        for(int i = 0; i < 52; i++) {
+            if (i % 4 == 0 && i != 0 && i < 36) numCard++;
+            if (i >= 48) numCard = 11;
+            arrayName.add(i, numCard);
         }
-        /*int a = deck.get(rdm.nextInt(52));
-        int b = deck.get(rdm.nextInt(52));
-        dealer.addDeck(a, b);
-        player.addDeck(8, 52);
-        player1.addDeck(17,51);
-        dealer.showOneCard();
-        System.out.println();
-        player.showCard();
-        System.out.println();
-        player1.showCard();*/
+    }
+    static void showDeck(ArrayList<Integer> arrayName){
+        for (int i = 1; i <= arrayName.size(); i++){
+            System.out.print(arrayName.get(i-1)+" ");
+            if (i%4==0) System.out.println();
+        }
+    }
+    static void shaffleDeck(ArrayList<Integer> arrayName){
+        Random rdm = new Random();
+        for (int j = 0; j < 3; j++){
+            for (int i = 0; i < arrayName.size(); i++) {
+                int rdmIndex = rdm.nextInt(arrayName.size());
+                swapPos(arrayName, i, rdmIndex);
+            }
+        }
+    }
+    static void swapPos(ArrayList<Integer> arrayName, int index1, int index2){
+        int temp = arrayName.get(index1);
+        arrayName.set(index1, index2);
+        arrayName.set(index2, temp);
     }
 }
