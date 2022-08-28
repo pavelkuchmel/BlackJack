@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class GameTable {
     public static void main(String[] args) {
@@ -8,6 +9,7 @@ public class GameTable {
         Random rdm = new Random();
         ArrayList<Integer> deck = new ArrayList<Integer>(52);
         ArrayList<Integer> usedCard = new ArrayList<Integer>();
+        ArrayList<Double> bets = new ArrayList<Double>(4);
         /*int numCard = 2;
         for(int i = 0; i < 52; i++){         //заполнение массива картами
             if (i%4==0&&i!=0&&i<36)numCard++;
@@ -20,8 +22,8 @@ public class GameTable {
         Player player2 = new Player();
         Player player3 = new Player();
         System.out.print("Enter quantity players: ");
-        int num = in.nextInt();
-        switch (num){
+        int numPlayers = in.nextInt();
+        switch (numPlayers){
             case 1:
                 System.out.print("Enter player name: ");
                 player.setName(in.next());
@@ -51,11 +53,28 @@ public class GameTable {
                 player3.setName(in.next());
                 break;
         }
-        fillDeck(deck);
-        shaffleDeck(deck);
+        for (int i = 0;;i++){
+            if (i==0) {
+                fillDeck(deck);
+                shaffleDeck(deck);
+            }
+            System.out.println("Players place a bet.");
+            System.out.print(player.getName()+": ");
+            bets.add(in.nextDouble());
+            dealer.takeCard(10, 6);
+            player.takeCard(10, 11);
+            showCard(dealer, player);
+            countPoints(dealer, player, deck, bets);
+            bank(bets, player);
+        }
+        //fillDeck(deck);
+        //System.out.println("Players place a bet.");
+        //System.out.print(player.getName()+": ");
+        //bets.add(in.nextDouble());
+        //shaffleDeck(deck);
         //showDeck(deck);
-        dealer.takeCard(takeRdmCard(deck), takeRdmCard(deck));
-        switch (num){
+        //dealer.takeCard(takeRdmCard(deck), takeRdmCard(deck));
+        /*switch (numPlayers){
             case 4:
                 player3.takeCard(takeRdmCard(deck), takeRdmCard(deck));
             case 3:
@@ -65,9 +84,11 @@ public class GameTable {
             case 1:
                 player.takeCard(takeRdmCard(deck), takeRdmCard(deck));
                 break;
-        }
-        showCard(dealer, player);
-        countPoints(dealer, player, deck);
+        }*/
+        //player.takeCard(10, 11);
+        //dealer.takeCard(10, 8);
+        //showCard(dealer, player);
+        //countPoints(dealer, player, deck, bets);
         /*System.out.print(player.getName()+" take more? Enter y/or other: ");
         char more = in.next().charAt(0);
         if (more=='y'){
@@ -94,16 +115,35 @@ public class GameTable {
         else {
             showCard(dealer, player, 1);
         }*/
-
-    }
-    static void countPoints (Dealer dealerName, Player playerName, ArrayList<Integer> arrayName){
-        if (playerName.intSumCard()==21&&dealerName.intAllCard()>=17){
+        /*do {
+            System.out.println("Dealer take card.");
+            timer();
+            dealerName.takeCard(takeRdmCard(arrayName));
             showCard(dealerName, playerName, 1);
-            System.out.println("Game over!\n"+playerName.getName()+" win");
+            timer();
+        }while (dealerName.intAllCard()<17);*/
+    }
+    static void countPoints (Dealer dealerName, Player playerName, ArrayList<Integer> arrayName, ArrayList<Double> arrayBet){
+        if (playerName.intSumCard()==21&&dealerName.deck.get(0)==10||dealerName.deck.get(0)==11){
+            System.out.println(playerName.getName()+" has a Black Jack!");
+            System.out.println("Dealer open the second card");
+            showCard(dealerName, playerName, 1);
+            timer();
+            if (dealerName.intSumCard()<21) {
+                System.out.println("Dealer has less. " + playerName.getName() + " won!");
+                arrayBet.set(0, arrayBet.get(0)*1.5);
+                timer();
+            }
+            else if (dealerName.intSumCard()==21){
+                System.out.println("Dealer has Black Jack. The bet is returned.");
+                timer();
+            }
         }
-        else if () {
+        else if (playerName.intSumCard()==21&&dealerName.deck.get(0)<10){
+            System.out.println(playerName.getName() + " has Black Jack. \nDealer has less."+playerName.getName() + " won!");
+        }
+        if ()
 
-        }
     }
     static int takeRdmCard(ArrayList<Integer> arrayName/*, ArrayList<Integer> arrayIndex*/){
         Random rdm = new Random();
@@ -133,7 +173,7 @@ public class GameTable {
         System.out.print(playerName.getName()+": ");
         playerName.showCard();
         System.out.println("\n----------------------");
-        return dealerName.intAllCard();
+        return dealerName.intSumCard();
     }
     static void showCard(Dealer dealerName, Player playerName){
         System.out.println("----------------------");
@@ -171,5 +211,42 @@ public class GameTable {
         int temp = arrayName.get(index1);
         arrayName.set(index1, arrayName.get(index2));
         arrayName.set(index2, temp);
+    }
+    static void timer(){
+        for (int i = 0;i<6;i++){
+            System.out.print(".");
+            try {TimeUnit.MILLISECONDS.sleep(1000);}catch (InterruptedException e){}
+        }
+        System.out.println();
+    }
+    static void timer(int second){
+        for (int i = 0;i<second;i++){
+            System.out.print(".");
+            try {TimeUnit.MILLISECONDS.sleep(1000);}catch (InterruptedException e){}
+        }
+        System.out.println();
+    }
+    static void bank (ArrayList<Double> arrayBet, Player player){
+        System.out.println("Amoint in the bank:");
+        System.out.println(player.getName()+": "+arrayBet.get(0));
+    }
+    static void bank (ArrayList<Double> arrayBet, Player player, Player player1){
+        System.out.println("Amoint in the bank:");
+        System.out.println(player.getName()+": "+arrayBet.get(0));
+        System.out.println(player1.getName()+": "+arrayBet.get(1));
+
+    }
+    static void bank (ArrayList<Double> arrayBet, Player player, Player player1, Player player2){
+        System.out.println("Amoint in the bank:");
+        System.out.println(player.getName()+": "+arrayBet.get(0));
+        System.out.println(player1.getName()+": "+arrayBet.get(1));
+        System.out.println(player2.getName()+": "+arrayBet.get(2));
+    }
+    static void bank (ArrayList<Double> arrayBet, Player player, Player player1, Player player2, Player player3){
+        System.out.println("Amoint in the bank:");
+        System.out.println(player.getName()+": "+arrayBet.get(0));
+        System.out.println(player1.getName()+": "+arrayBet.get(1));
+        System.out.println(player2.getName()+": "+arrayBet.get(2));
+        System.out.println(player3.getName()+": "+arrayBet.get(3));
     }
 }

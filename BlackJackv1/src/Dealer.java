@@ -5,7 +5,7 @@ public class Dealer {
     public String getName(){
         return name;
     }
-    static ArrayList<Integer> deck = new ArrayList<Integer>();
+    ArrayList<Integer> deck = new ArrayList<Integer>();
     public void takeCard(int a){
         deck.add(a);
     }
@@ -26,7 +26,7 @@ public class Dealer {
         System.out.println("Sum: "+sum);
         int exit = sum;
     }
-    public int intAllCard(){
+    public int intSumCard(){
         int sum = 0;
         for (int i = 0; i<deck.size();i++){
             sum += deck.get(i);
