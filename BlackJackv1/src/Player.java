@@ -1,14 +1,35 @@
 import java.util.ArrayList;
 
 public class Player {
+        private String name;
         ArrayList<Integer> deck = new ArrayList<Integer>();
-        public void addDeck(int a, int b){
+        public void takeCard(int a){
+                deck.add(a);
+        }
+        public void takeCard(int a, int b){
                 deck.add(a);
                 deck.add(b);
         }
         public void showCard(){
-                System.out.println(deck.get(0));
-                System.out.println(deck.get(1));
+                int sum = 0;
+                for (int i = 0; i<deck.size();i++) {
+                        System.out.print(deck.get(i) + " ");
+                        sum += deck.get(i);
+                }
+                System.out.print(" Sum: "+sum);
+        }
+        public int intSumCard(){
+                int sum = 0;
+                for (int i = 0; i<deck.size();i++) {
+                        sum += deck.get(i);
+                }
+                return sum;
+        }
+        public void setName(String name){
+               this.name = name;
+        }
+        public String getName(){
+                 return name;
         }
 
 }
