@@ -109,7 +109,6 @@ public class GameTable {
                     player.takeCard(takeRdmCard(deck), takeRdmCard(deck));
                     break;
             }
-            //showCard(dealer, player);
             countPoints(dealer, player, deck, betBank);
             System.out.print("Show bank? y/or other: ");
             char bank = in.next().charAt(0);
